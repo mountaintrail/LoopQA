@@ -1,37 +1,62 @@
-    import { test, expect } from '@playwright/test';
-    import testData from './data.json'; // Import JSON with ES syntax
+import testData from './data.json';
+import { test, expect } from '@playwright/test';
 
-     const BASE_URL = 'https://animated-gingersnap-8cf7f2.netlify.app/';
-     const EMAIL = 'admin';
-     const PASSWORD = 'password123';
+const BASE_URL = process.env.BASE_URL || 'https://animated-gingersnap-8cf7f2.netlify.app/';
+const USERNAME = process.env.TEST_USERNAME || 'admin';
+const PASSWORD = process.env.TEST_PASSWORD || 'password123';
 
-     test.describe('Data-Driven Tests for Demo App', () => {
-       // Reusable login function
-       async function login(page) {
-         await page.goto(BASE_URL);
-         await page.fill('input[name="email"]', EMAIL);
-         await page.fill('input[name="password"]', PASSWORD);
-         await page.click('button:has-text("Log In")');
-         expect(await page.locator('text=Welcome').isVisible()).toBeTruthy(); // Confirm login
-       }
+test.use({ browserName: 'chromium', channel: 'chrome' });
 
-       // Iterate through testData and dynamically create tests
-       for (const data of testData) {
-         test(`Verify task "${data.task}" in ${data.application}`, async ({ page }) => {
-           await login(page);
+test.beforeEach(async ({ page }) => {
+  await page.goto(BASE_URL);
 
-           // Navigate to the appropriate application
-           await page.click(`text=${data.application}`);
+  // Username field
+  const usernameField = page.locator('input[name="Username"]'); // More explicit selector
+  await urnameField.fill(USERNAME);
 
-           // Verify task and status
-           const taskLocator = page.locator(`.task:has-text("${data.task}")`);
-           await expect(taskLocator).toBeVisible();
-           await expect(taskLocator).toHaveAttribute('data-status', data.status);
+  // Password field
+  const passwordField = page.locator('input[name="Password"]'); // More explicit selector
+  await passwordField.fill(PASSWORD);
 
-           // Verify tags
-           for (const tag of data.tags) {
-             await expect(taskLocator.locator(`.tag:has-text("${tag}")`)).toBeVisible();
-           }
-         });
-       }
-     });
+  // Sign-in button
+  const signInButton = page.locator('button:has-text("Sign in")'); // Handled dynamic text
+  await signInButton.click();
+
+  // Confirm successful login
+  const banner = page.getByRole('banner');
+  await banner.waitFor({ state: 'visible', timeout: 60000 }); // Wait for banner to ensure login is complete
+  await expect(banner.getByRole('heading', { name: 'Web Application' })).toBeVisible();
+});
+
+// Perform cleanup after all tests in the suite
+test.afterAll(async ({ page }) => {
+  // Example: Log out or clear session if needed
+  const logoutButton = page.locator('button:has-text("Logout")'); // Replace with the actual selector for your logout button
+  if (await logoutButton.isVisible()) {
+    await logoutButton.click();
+  }
+
+  // Example: Clear cookies and local storage for the session
+  await page.context().clearCookies();
+  await page.evaluate(() => localStorage.clear());
+});
+
+test.describe('Data-Driven Tests for Demo App', () => {
+  for (const data of testData) {
+    test(`Verify task "${data.task}" in ${data.application}`, async ({ page }) => {
+      // Navigate
+      await page.click(`text=${data.application}`);
+      await expect(page.locator('.task-list')).toBeVisible(); // Wait for the task section
+
+      // Verify task and status
+      const taskLocator = page.locator(`.task:has-text("${data.task}")`);
+      await taskLocator.waitFor({ state: 'visible' });
+      await expect(taskLocator).toHaveAttribute('data-status', data.status);
+
+      // Verify tags
+      for (const tag of data.tags) {
+        await expect(taskLocator.locator(`.tag:has-text("${tag}")`)).toBeVisible();
+      }
+    });
+  }
+});
