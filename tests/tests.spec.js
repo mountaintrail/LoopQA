@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-// Importing test data from JSON file
 import testData from './data.json';
 
 test.use({ browserName: 'chromium' });
@@ -9,12 +8,11 @@ const USERNAME = process.env.TEST_USERNAME || 'admin';
 const PASSWORD = process.env.TEST_PASSWORD || 'password123';
 const CLEAR_COOKIES = (process.env.CLEAR_COOKIES || 'false') === 'true';
 
-// Warn about default credentials usage
 if (!process.env.TEST_USERNAME || !process.env.TEST_PASSWORD) {
-  console.warn('Default login credentials are being used. Please configure TEST_USERNAME and TEST_PASSWORD for secure login.');
+  console.warn('Using default credentials: please update TEST_USERNAME and TEST_PASSWORD for security!');
 }
 
-// Clear cookies and local storage between tests if required
+// Clears cookies and local storage between tests if needed
 test.afterEach(async ({ page }) => {
   if (CLEAR_COOKIES) {
     await page.context().clearCookies();
@@ -22,50 +20,85 @@ test.afterEach(async ({ page }) => {
   }
 });
 
-// Helper function to dynamically navigate to the correct section and validate task visibility
-const verifyTaskVisibility = async (page, taskName, section) => {
-  if (section === "Mobile Application") {
-    // Step for Mobile Application: Click 'Mobile Application Native' button
-    console.log("Navigating to the Mobile Application...");
-    const mobileAppNativeButton = page.getByRole('button', { name: 'Mobile Application Native' });
-    await mobileAppNativeButton.click();
-
-    // Wait for the banner heading for Mobile Application
+/**
+ * Verify visibility of a task (heading) and its tags.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} taskName
+ * @param {string} section
+ * @param {string[]} tags
+ */
+const verifyTaskVisibility = async (page, taskName, section, tags) => {
+  // Navigate to the relevant page section
+  if (section === 'Mobile Application') {
+    console.log('Navigating to Mobile Application...');
+    await page.getByRole('button', { name: 'Mobile Application Native' }).click();
     await page.getByRole('banner').getByRole('heading', { name: 'Mobile Application' }).click();
   } else {
-    // Navigate directly to the section for other cases (e.g., Web Application)
-    console.log(`Navigating to the ${section} section...`);
+    console.log(`Navigating to ${section} section...`);
     await page.getByRole('banner').getByRole('heading', { name: section }).click();
   }
 
-  // Validate visibility of the task by its heading name
-  console.log(`Validating visibility of the task: '${taskName}'`);
-  const task = page.getByRole('heading', { name: taskName }); // Simplified locator for the task
-  await expect(task).toBeVisible(); // Expect the task to be visible
+  console.log(`Checking task: "${taskName}"`);
+  // Check the main task heading
+  await expect(page.getByRole('heading', { name: taskName })).toBeVisible();
+
+  // Verify each tag using the locator variants provided
+  for (const tag of tags) {
+    console.log(`Verifying tag: "${tag}"`);
+
+    if (tag === 'Feature') {
+      // Variant A: first matching element
+      await expect(page.getByText('Feature').first()).toBeVisible();
+
+      // Variant B: nth(1)
+      // await expect(page.getByText('Feature').nth(1)).toBeVisible();
+
+      // Variant C: filtering a div with exact text, then locating an inner span
+      // await expect(page.locator('div').filter({ hasText: /^Feature$/ }).locator('span')).toBeVisible();
+
+    } else if (tag === 'High Priority') {
+      // Variant A: first match
+      await expect(page.getByText('High Priority').first()).toBeVisible();
+
+      // Variant B: simple getByText
+      // await expect(page.getByText('High Priority')).toBeVisible();
+
+    } else if (tag === 'Bug') {
+      // Exact match for "Bug"
+      await expect(page.getByText('Bug', { exact: true })).toBeVisible();
+
+    } else if (tag === 'Design') {
+      // Exact match for "Design"
+      await expect(page.getByText('Design', { exact: true })).toBeVisible();
+
+    } else {
+      // Fallback for any other tags, if needed
+      await expect(page.getByText(tag)).toBeVisible();
+    }
+  }
 };
 
-// Group tests in a describe block
 test.describe('Data-Driven Tests for Demo App', () => {
-  // Loop through all test data and dynamically generate test cases
   testData.forEach(({ description, section, column, taskName, tags }) => {
     test(description, async ({ page }) => {
-      // Navigate to app
+      // 1) Navigate to the application
       await page.goto(APP_URL);
 
-      // Login using credentials
-      console.log("Logging in...");
+      // 2) Log in
+      console.log('Logging in...');
       await page.getByRole('textbox', { name: 'Username' }).fill(USERNAME);
       await page.getByRole('textbox', { name: 'Password' }).fill(PASSWORD);
       await page.getByRole('button', { name: 'Sign in' }).click();
 
-      // Wait for the app to load
+      // 3) Wait for everything to load
       await page.waitForLoadState('domcontentloaded');
 
-      // Verify task dynamically, handling section-specific requirements
-      await verifyTaskVisibility(page, taskName, section);
+      // 4) Verify the specified task (and its tags) in the given section
+      await verifyTaskVisibility(page, taskName, section, tags);
 
-      // (Optional) Log additional information for debugging or reporting
-      console.log(`Task '${taskName}' was successfully verified in section '${section}' under the '${column}' column.`);
+      // 5) Log the result
+      console.log(`Task "${taskName}" verified under "${section}" in the "${column}" column.`);
     });
   });
 });
