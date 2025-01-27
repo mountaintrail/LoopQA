@@ -21,7 +21,7 @@ test.afterEach(async ({ page }) => {
 });
 
 /**
- * Verify visibility of a task (heading) and its tags.
+ * Verify a task heading and its tags.
  *
  * @param {import('@playwright/test').Page} page
  * @param {string} taskName
@@ -40,29 +40,34 @@ const verifyTaskVisibility = async (page, taskName, section, tags) => {
   }
 
   console.log(`Checking task: "${taskName}"`);
-  // Check the main task heading
+  // Confirm main heading visibility
   await expect(page.getByRole('heading', { name: taskName })).toBeVisible();
 
-  // Verify each tag using the locator variants provided
+  // Verify each tag
   for (const tag of tags) {
     console.log(`Verifying tag: "${tag}"`);
 
     if (tag === 'Feature') {
-      // Variant A: first matching element
+      // Use the first matching "Feature" element
       await expect(page.getByText('Feature').first()).toBeVisible();
 
-      // Variant B: nth(1)
-      // await expect(page.getByText('Feature').nth(1)).toBeVisible();
+    } else if (tag === 'Feature.nth(1)') {
+      // Explicitly choose the second item
+      await expect(page.getByText('Feature').nth(1)).toBeVisible();
 
-      // Variant C: filtering a div with exact text, then locating an inner span
-      // await expect(page.locator('div').filter({ hasText: /^Feature$/ }).locator('span')).toBeVisible();
+    } else if (tag === 'Feature .inner span') {
+      // Filter for a div containing exactly 'Feature', then locate an inner span
+      await expect(
+        page.locator('div').filter({ hasText: /^Feature$/ }).locator('span')
+      ).toBeVisible();
 
-    } else if (tag === 'High Priority') {
-      // Variant A: first match
+    } else if (tag === 'High Priority.first') {
+      // First "High Priority" element
       await expect(page.getByText('High Priority').first()).toBeVisible();
 
-      // Variant B: simple getByText
-      // await expect(page.getByText('High Priority')).toBeVisible();
+    } else if (tag === 'High Priority') {
+      // All "High Priority" or simplest form
+      await expect(page.getByText('High Priority')).toBeVisible();
 
     } else if (tag === 'Bug') {
       // Exact match for "Bug"
@@ -73,8 +78,8 @@ const verifyTaskVisibility = async (page, taskName, section, tags) => {
       await expect(page.getByText('Design', { exact: true })).toBeVisible();
 
     } else {
-      // Fallback for any other tags, if needed
-      await expect(page.getByText(tag)).toBeVisible();
+      // Fallback, only if it's truly something else
+      await expect(page.getByText(tag, { exact: true })).toBeVisible();
     }
   }
 };

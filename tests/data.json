@@ -4,7 +4,7 @@
     "section": "Web Application",
     "column": "To Do",
     "taskName": "Implement user authentication",
-    "tags": ["Feature", "High Priority"]
+    "tags": ["Feature", "High Priority.first"]
   },
   {
     "description": "Verify 'Fix navigation bug' task",
@@ -25,14 +25,14 @@
     "section": "Mobile Application",
     "column": "To Do",
     "taskName": "Push notification system",
-    "tags": ["Feature"]
+    "tags": ["Feature .inner span"]
   },
   {
     "description": "Verify 'Offline mode' task",
     "section": "Mobile Application",
     "column": "In Progress",
     "taskName": "Offline mode",
-    "tags": ["Feature", "High Priority"]
+    "tags": ["Feature.nth(1)", "High Priority"]
   },
   {
     "description": "Verify 'App icon design' task",
