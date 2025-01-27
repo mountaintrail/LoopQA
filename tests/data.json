@@ -1,38 +1,44 @@
 [
   {
-    "application": "Web Application Main web",
-    "task": "Implement user authentication",
-    "status": "To Do",
+    "description": "Verify 'Implement user authentication' task",
+    "section": "Web Application",
+    "column": "To Do",
+    "taskName": "Implement user authentication",
     "tags": ["Feature", "High Priority"]
   },
   {
-    "application": "Web Application Main web",
-    "task": "Fix navigation bug",
-    "status": "To Do",
+    "description": "Verify 'Fix navigation bug' task",
+    "section": "Web Application",
+    "column": "To Do",
+    "taskName": "Fix navigation bug",
     "tags": ["Bug"]
   },
   {
-    "application": "Web Application Main web",
-    "task": "Design system updates",
-    "status": "In Progress",
+    "description": "Verify 'Design system updates' task",
+    "section": "Web Application",
+    "column": "In Progress",
+    "taskName": "Design system updates",
     "tags": ["Design"]
   },
   {
-    "application": "Mobile Application Native",
-    "task": "Push notification system",
-    "status": "To Do",
+    "description": "Verify 'Push notification system' task",
+    "section": "Mobile Application",
+    "column": "To Do",
+    "taskName": "Push notification system",
     "tags": ["Feature"]
   },
   {
-    "application": "Mobile Application Native",
-    "task": "Offline mode",
-    "status": "In Progress",
+    "description": "Verify 'Offline mode' task",
+    "section": "Mobile Application",
+    "column": "In Progress",
+    "taskName": "Offline mode",
     "tags": ["Feature", "High Priority"]
   },
   {
-    "application": "Mobile Application Native",
-    "task": "App icon design",
-    "status": "Done",
+    "description": "Verify 'App icon design' task",
+    "section": "Mobile Application",
+    "column": "Done",
+    "taskName": "App icon design",
     "tags": ["Design"]
   }
 ]

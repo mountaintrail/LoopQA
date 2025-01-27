@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+/test-results/.last-run.json
+/playwright.config.js
+/test-results/tests-tests-Data-Driven-Te-0abf8--Design-system-updates-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-2dc0f-pp-Verify-Offline-mode-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-3a413-ify-Fix-navigation-bug-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-9e3ed-sh-notification-system-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-00967-Verify-App-icon-design-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-f4733-nt-user-authentication-task-Safari/test-finished-1.png

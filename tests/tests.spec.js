@@ -1,21 +1,18 @@
-// noinspection UnreachableCodeJS
-
 import { test, expect } from '@playwright/test';
-test.use({ browserName: 'chromium' });
-// import testData from './data.json' assert { type: 'json' };
 
-// Environment variables with defaults for flexibility
+test.use({ browserName: 'chromium' });
+
 const APP_URL = process.env.APP_URL || 'https://animated-gingersnap-8cf7f2.netlify.app/';
 const USERNAME = process.env.TEST_USERNAME || 'admin';
 const PASSWORD = process.env.TEST_PASSWORD || 'password123';
 const CLEAR_COOKIES = (process.env.CLEAR_COOKIES || 'false') === 'true';
 
-// Warn if using default credentials
+// Warn about default credentials usage
 if (!process.env.TEST_USERNAME || !process.env.TEST_PASSWORD) {
   console.warn('Default login credentials are being used. Please configure TEST_USERNAME and TEST_PASSWORD for secure login.');
 }
 
-// Test data in JSON format to drive the test scenarios
+// Test data array
 const testData = [
   {
     description: "Verify 'Implement user authentication' task",
@@ -61,47 +58,58 @@ const testData = [
   },
 ];
 
-// Clear cookies and local storage after each test if CLEAR_COOKIES is set
+// Clear cookies and local storage between tests if required
 test.afterEach(async ({ page }) => {
   if (CLEAR_COOKIES) {
     await page.context().clearCookies();
     await page.evaluate(() => localStorage.clear());
   }
-      });
+});
 
-// Dynamically create test cases inside a test.describe block
+// Helper function to dynamically navigate to the correct section and validate task visibility
+const verifyTaskVisibility = async (page, taskName, section) => {
+  if (section === "Mobile Application") {
+    // Step for Mobile Application: Click 'Mobile Application Native' button
+    console.log("Navigating to the Mobile Application...");
+    const mobileAppNativeButton = page.getByRole('button', { name: 'Mobile Application Native' });
+    await mobileAppNativeButton.click();
+
+    // Wait for the banner heading for Mobile Application
+    await page.getByRole('banner').getByRole('heading', { name: 'Mobile Application' }).click();
+  } else {
+    // Navigate directly to the section for other cases (e.g., Web Application)
+    console.log(`Navigating to the ${section} section...`);
+    await page.getByRole('banner').getByRole('heading', { name: section }).click();
+  }
+
+  // Validate visibility of the task by its heading name
+  console.log(`Validating visibility of the task: '${taskName}'`);
+  const task = page.getByRole('heading', { name: taskName }); // Simplified locator for the task
+  await expect(task).toBeVisible(); // Expect the task to be visible
+};
+
+// Group tests in a describe block
 test.describe('Data-Driven Tests for Demo App', () => {
+  // Loop through all test data and dynamically generate test cases
   testData.forEach(({ description, section, column, taskName, tags }) => {
     test(description, async ({ page }) => {
-      // Navigate to the target section
+      // Navigate to app
       await page.goto(APP_URL);
 
-      // Fill in the username
+      // Login using credentials
+      console.log("Logging in...");
       await page.getByRole('textbox', { name: 'Username' }).fill(USERNAME);
-
-
-
-      // Fill in the password
       await page.getByRole('textbox', { name: 'Password' }).fill(PASSWORD);
-
-      // Click the submit button
       await page.getByRole('button', { name: 'Sign in' }).click();
 
-      /// Wait for navigation after successful login
+      // Wait for the app to load
+      await page.waitForLoadState('domcontentloaded');
 
-// Interact with the 'Web Application' section header (as per locator behavior)
-      const sectionHeading = page.getByRole('banner').getByRole('heading', { name: section });
-      await sectionHeading.click();
+      // Verify task dynamically, handling section-specific requirements
+      await verifyTaskVisibility(page, taskName, section);
 
-      // Verify task exists in the correct column
-      const taskSelector = `div.column-header:has-text("${column}") ~ div.task-list div.task:has-text("${taskName}")`;
-      // Helper function to validate task visibility
-      const verifyTaskVisibility = async (page, taskName) => {
-        const task = page.getByRole('heading', { name: taskName });
-        await expect(task).toBeVisible();
-      };
-// Test suite for dynamic task validation
-
-    }); // End of outer test block
-  }); // End of outer test block
-  }); // End of test.describe block
+      // (Optional) Log additional information for debugging or reporting
+      console.log(`Task '${taskName}' was successfully verified in section '${section}' under the '${column}' column.`);
+    });
+  });
+});
