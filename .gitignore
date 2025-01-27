@@ -1,0 +1,32 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+/test-results/.last-run.json
+/playwright.config.js
+/test-results/tests-tests-Data-Driven-Te-0abf8--Design-system-updates-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-2dc0f-pp-Verify-Offline-mode-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-3a413-ify-Fix-navigation-bug-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-9e3ed-sh-notification-system-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-00967-Verify-App-icon-design-task-Safari/test-finished-1.png
+/test-results/tests-tests-Data-Driven-Te-f4733-nt-user-authentication-task-Safari/test-finished-1.png

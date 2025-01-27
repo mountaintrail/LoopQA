@@ -1,0 +1,44 @@
+[
+  {
+    "description": "Verify 'Implement user authentication' task",
+    "section": "Web Application",
+    "column": "To Do",
+    "taskName": "Implement user authentication",
+    "tags": ["Feature", "High Priority.first"]
+  },
+  {
+    "description": "Verify 'Fix navigation bug' task",
+    "section": "Web Application",
+    "column": "To Do",
+    "taskName": "Fix navigation bug",
+    "tags": ["Bug"]
+  },
+  {
+    "description": "Verify 'Design system updates' task",
+    "section": "Web Application",
+    "column": "In Progress",
+    "taskName": "Design system updates",
+    "tags": ["Design"]
+  },
+  {
+    "description": "Verify 'Push notification system' task",
+    "section": "Mobile Application",
+    "column": "To Do",
+    "taskName": "Push notification system",
+    "tags": ["Feature .inner span"]
+  },
+  {
+    "description": "Verify 'Offline mode' task",
+    "section": "Mobile Application",
+    "column": "In Progress",
+    "taskName": "Offline mode",
+    "tags": ["Feature.nth(1)", "High Priority"]
+  },
+  {
+    "description": "Verify 'App icon design' task",
+    "section": "Mobile Application",
+    "column": "Done",
+    "taskName": "App icon design",
+    "tags": ["Design"]
+  }
+]
