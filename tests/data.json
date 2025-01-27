@@ -1,38 +1,38 @@
-     [
-       {
-         "application": "Web Application",
-         "task": "Implement user authentication",
-         "status": "To Do",
-         "tags": ["Feature", "High Priority"]
-       },
-       {
-         "application": "Web Application",
-         "task": "Fix navigation bug",
-         "status": "To Do",
-         "tags": ["Bug"]
-       },
-       {
-         "application": "Web Application",
-         "task": "Design system updates",
-         "status": "In Progress",
-         "tags": ["Design"]
-       },
-       {
-         "application": "Mobile Application",
-         "task": "Push notification system",
-         "status": "To Do",
-         "tags": ["Feature"]
-       },
-       {
-         "application": "Mobile Application",
-         "task": "Offline mode",
-         "status": "In Progress",
-         "tags": ["Feature", "High Priority"]
-       },
-       {
-         "application": "Mobile Application",
-         "task": "App icon design",
-         "status": "Done",
-         "tags": ["Design"]
-       }
-     ]
+[
+  {
+    "application": "Web Application Main web",
+    "task": "Implement user authentication",
+    "status": "To Do",
+    "tags": ["Feature", "High Priority"]
+  },
+  {
+    "application": "Web Application Main web",
+    "task": "Fix navigation bug",
+    "status": "To Do",
+    "tags": ["Bug"]
+  },
+  {
+    "application": "Web Application Main web",
+    "task": "Design system updates",
+    "status": "In Progress",
+    "tags": ["Design"]
+  },
+  {
+    "application": "Mobile Application Native",
+    "task": "Push notification system",
+    "status": "To Do",
+    "tags": ["Feature"]
+  },
+  {
+    "application": "Mobile Application Native",
+    "task": "Offline mode",
+    "status": "In Progress",
+    "tags": ["Feature", "High Priority"]
+  },
+  {
+    "application": "Mobile Application Native",
+    "task": "App icon design",
+    "status": "Done",
+    "tags": ["Design"]
+  }
+]
