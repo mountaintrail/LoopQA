@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+// Importing test data from JSON file
+import testData from './data.json';
 
 test.use({ browserName: 'chromium' });
 
@@ -11,52 +13,6 @@ const CLEAR_COOKIES = (process.env.CLEAR_COOKIES || 'false') === 'true';
 if (!process.env.TEST_USERNAME || !process.env.TEST_PASSWORD) {
   console.warn('Default login credentials are being used. Please configure TEST_USERNAME and TEST_PASSWORD for secure login.');
 }
-
-// Test data array
-const testData = [
-  {
-    description: "Verify 'Implement user authentication' task",
-    section: "Web Application",
-    column: "To Do",
-    taskName: "Implement user authentication",
-    tags: ["Feature", "High Priority"],
-  },
-  {
-    description: "Verify 'Fix navigation bug' task",
-    section: "Web Application",
-    column: "To Do",
-    taskName: "Fix navigation bug",
-    tags: ["Bug"],
-  },
-  {
-    description: "Verify 'Design system updates' task",
-    section: "Web Application",
-    column: "In Progress",
-    taskName: "Design system updates",
-    tags: ["Design"],
-  },
-  {
-    description: "Verify 'Push notification system' task",
-    section: "Mobile Application",
-    column: "To Do",
-    taskName: "Push notification system",
-    tags: ["Feature"],
-  },
-  {
-    description: "Verify 'Offline mode' task",
-    section: "Mobile Application",
-    column: "In Progress",
-    taskName: "Offline mode",
-    tags: ["Feature", "High Priority"],
-  },
-  {
-    description: "Verify 'App icon design' task",
-    section: "Mobile Application",
-    column: "Done",
-    taskName: "App icon design",
-    tags: ["Design"],
-  },
-];
 
 // Clear cookies and local storage between tests if required
 test.afterEach(async ({ page }) => {
